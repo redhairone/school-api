@@ -6,12 +6,15 @@ import com.ciesielski.schoolapi.infrastructure.entities.ChildEntity;
 public class ChildMapper implements Mapper<ChildEntity, Child>{
     @Override
     public Child map(ChildEntity input) {
+        ParentMapper parentMapper = new ParentMapper();
+        SchoolMapper schoolMapper = new SchoolMapper();
+
         return Child.builder()
                 .id(input.getId())
-                .firstname(input.getFirst_name())
-                .lastname(input.getLast_name())
-                .parent_id(input.getParent_id())
-                .school_id(input.getSchool_id())
+                .firstname(input.getFirstName())
+                .lastname(input.getLastName())
+                .parent(parentMapper.map(input.getParent()))
+                .school(schoolMapper.map(input.getSchool()))
                 .build();
     }
 }

@@ -4,11 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 public class SchoolEntity {
     @Id
     private Long id;
     private String name;
-    private double hour_price;
+    private BigDecimal hourPrice;
 }

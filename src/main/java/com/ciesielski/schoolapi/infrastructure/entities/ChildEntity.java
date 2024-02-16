@@ -8,12 +8,12 @@ import lombok.Data;
 public class ChildEntity {
     @Id
     private Long id;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     @ManyToOne
-    @JoinColumn(name = "PARENT_ID")
-    private ParentEntity parent_id;
+    @JoinColumn(name = "parent_id")
+    private ParentEntity parent;
     @ManyToOne
-    @JoinColumn(name = "SCHOOL_ID")
-    private SchoolEntity school_id;
+    @JoinColumn(name = "school_id")
+    private SchoolEntity school;
 }

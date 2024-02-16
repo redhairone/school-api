@@ -3,12 +3,12 @@ package com.ciesielski.schoolapi.domain.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
-public class Child {
-    private Long id;
-    private String firstname;
-    private String lastname;
+public class ParentBill {
     private Parent parent;
-    private School school;
+    private Double fullCost;
+    private List<ChildBill> childrenBills;
 }

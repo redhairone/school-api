@@ -10,7 +10,7 @@ public class SchoolMapper implements Mapper<SchoolEntity, School> {
         return School.builder()
                 .id(input.getId())
                 .name(input.getName())
-                .hour_price(input.getHour_price())
+                .hour_price(input.getHourPrice())
                 .build();
     }
 }

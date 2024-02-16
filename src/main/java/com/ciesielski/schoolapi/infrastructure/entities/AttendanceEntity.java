@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public class AttendanceEntity {
     @Id
     private Long id;
-    private LocalDateTime entry_date;
-    private LocalDateTime exit_date;
+    private LocalDateTime entryDate;
+    private LocalDateTime exitDate;
     @ManyToOne
-    @JoinColumn(name = "CHILD_ID")
-    private ChildEntity child_id;
+    @JoinColumn(name = "child_id")
+    private ChildEntity child;
 }
