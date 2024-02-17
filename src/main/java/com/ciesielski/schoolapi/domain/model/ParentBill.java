@@ -1,14 +1,21 @@
 package com.ciesielski.schoolapi.domain.model;
 
-import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@Builder
 public class ParentBill {
     private Parent parent;
-    private Double fullCost;
+    private BigDecimal fullCost;
     private List<ChildBill> childrenBills;
+
+    public ParentBill(final Parent parent, final List<ChildBill> childrenBills) {
+        this.parent = parent;
+        this.childrenBills = childrenBills;
+        this.fullCost = childrenBills.stream()
+                .map(ChildBill::getCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

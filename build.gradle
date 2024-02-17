@@ -69,7 +69,8 @@ task generatePostsAndComments() {
 		// ATTENDANCE
 		for (int i = 1; i <= 15; i++) {
 			dataSql.append("insert into ATTENDANCE_ENTITY(id, entry_date, exit_date, child_id) " +
-					"values (${i}, '" + LocalDateTime.now().minusDays(i) + "', '" + LocalDateTime.now().minusDays(i-1) + "', ${i%9+1});\n")
+					"values (${i}, '" + LocalDateTime.now().withHour(i) + "', '" + LocalDateTime.now().withHour(i+3) + "', ${i%9+1});\n"
+			)
 		}
 	}
 }

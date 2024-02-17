@@ -4,13 +4,11 @@ import com.ciesielski.schoolapi.domain.model.*;
 import com.ciesielski.schoolapi.domain.repo.AttendanceRepo;
 import com.ciesielski.schoolapi.domain.repo.ChildRepo;
 import com.ciesielski.schoolapi.domain.repo.ParentRepo;
-import com.ciesielski.schoolapi.infrastructure.entities.ChildEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +20,7 @@ public class ParentService {
     private final AttendanceRepo attendanceRepo;
 
     @Transactional
-    public ParentBill getParentBillForMonth(Long id, int month) {
+    public ParentBill getParentBillForMonth(Long id, int month) { //todo: add the month requirement
         // Find PARENT
         Parent parent = parentRepo.findParentById(id).orElseThrow();
 
@@ -30,15 +28,13 @@ public class ParentService {
         List<Child> children = childRepo.findAllChildrenByParentId(id);
 
         // Find ATTENDANCES by children ids
-        // todo: WIP
         List<Long> childrenIds = children.stream().map(Child::getId).toList();
-//        Map<ChildEntity, List<Attendance>> attendances = attendanceRepo.findAllAttendanceByChildIdIn(childrenIds)
-//                .stream().collect(Collectors.groupingBy(Attendance::getChildId));
+        List<ChildBill> attendances = attendanceRepo.findAllAttendanceByChildIdIn(childrenIds).stream()
+                .collect(Collectors.groupingBy(Attendance::getChild))
+                .entrySet().stream()
+                .map(mapEntry -> new ChildBill(mapEntry.getKey(), mapEntry.getValue()))
+                .toList();
 
-
-
-        return ParentBill.builder()
-                .parent(parent)
-                .build();
+        return new ParentBill(parent, attendances);
     }
 }

@@ -23,7 +23,7 @@ public class Attendance {
         this.exitDate = exitDate;
         this.child = child;
 
-        if (entryDate.isAfter(exitDate)) {
+        if (isEntryAfterExit()) {
             throw new AttendanceDateError("Exit date cannot be set to after the entry date");
         }
 
@@ -32,27 +32,21 @@ public class Attendance {
         }
     }
 
-    private boolean isEntryAndExitNotTheSameDay() {
-        return !entryDate.toLocalDate().equals(exitDate.toLocalDate());
-    }
-
     public long calculateNumberOfPayedHours() {
         LocalTime startTime = entryDate.toLocalTime();
         LocalTime endTime = exitDate.toLocalTime();
         long numberOfPaidHours = 0;
 
-        // Count hours before 7AM
-        if (startTime.isBefore(SEVEN_AM)) {
+        if (isItBeforeSevenAm(startTime)) {
             numberOfPaidHours += countHours(
                     startTime,
-                    isBeforeOrAt(endTime, SEVEN_AM) ? endTime : SEVEN_AM
+                    isBeforeOrAtSevenAm(endTime) ? endTime : SEVEN_AM
             );
         }
 
-        // Count hours after 12PM
-        if (endTime.isAfter(TWELVE_PM)) {
+        if (isItAfterTwelvePm(endTime)) {
             numberOfPaidHours += countHours(
-                    startTime.isAfter(TWELVE_PM) ? startTime : TWELVE_PM,
+                    isItAfterTwelvePm(startTime) ? startTime : TWELVE_PM,
                     endTime
             );
         }
@@ -60,7 +54,6 @@ public class Attendance {
         return numberOfPaidHours;
     }
 
-    // WORKS
     private long countHours(LocalTime startTime, LocalTime endTime) {
         if (startTime.getHour() == endTime.getHour()) return 1;
 
@@ -71,7 +64,23 @@ public class Attendance {
         return result + 1;
     }
 
-    private boolean isBeforeOrAt(LocalTime time, LocalTime comparator) {
-        return time.isBefore(comparator) || time.equals(comparator);
+    private boolean isEntryAndExitNotTheSameDay() {
+        return !this.entryDate.toLocalDate().equals(this.exitDate.toLocalDate());
+    }
+
+    private boolean isEntryAfterExit() {
+        return this.entryDate.isAfter(this.exitDate);
+    }
+
+    private boolean isBeforeOrAtSevenAm(LocalTime time) {
+        return time.isBefore(Attendance.SEVEN_AM) || time.equals(Attendance.SEVEN_AM);
+    }
+
+    private static boolean isItAfterTwelvePm(LocalTime endTime) {
+        return endTime.isAfter(TWELVE_PM);
+    }
+
+    private static boolean isItBeforeSevenAm(LocalTime startTime) {
+        return startTime.isBefore(SEVEN_AM);
     }
 }

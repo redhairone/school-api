@@ -14,9 +14,8 @@ import java.util.List;
 public interface AttendanceJpaRepo extends JpaRepository<AttendanceEntity, Long>, AttendanceRepo {
 
     default List<Attendance> findAllAttendanceByChildIdIn(Collection<Long> ids) {
-        final AttendanceMapper attendanceMapper = new AttendanceMapper();
         return this.findAllByChildIdIn(ids).stream()
-                .map(attendanceMapper::map).toList();
+                .map(AttendanceMapper::map).toList();
     }
 
     List<AttendanceEntity> findAllByChildIdIn(Collection<Long> ids);

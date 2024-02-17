@@ -14,10 +14,8 @@ import java.util.stream.Collectors;
 public interface ChildJpaRepo extends JpaRepository<ChildEntity, Long>, ChildRepo {
 
     default List<Child> findAllChildrenByParentId(Long id) {
-        final ChildMapper childMapper = new ChildMapper();
-
         return this.findAllByParentId(id).stream()
-                .map(childMapper::map)
+                .map(ChildMapper::map)
                 .collect(Collectors.toList());
     }
 

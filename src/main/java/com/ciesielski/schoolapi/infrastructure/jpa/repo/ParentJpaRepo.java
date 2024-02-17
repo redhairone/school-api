@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface ParentJpaRepo extends JpaRepository<ParentEntity, Long>, ParentRepo {
 
     default Optional<Parent> findParentById(Long id) {
-        final ParentMapper parentMapper = new ParentMapper();
-        return this.findById(id).map(parentMapper::map);
+        return this.findById(id).map(ParentMapper::map);
     }
 }

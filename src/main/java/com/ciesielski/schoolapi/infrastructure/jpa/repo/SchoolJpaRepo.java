@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface SchoolJpaRepo extends JpaRepository<SchoolEntity, Long>, SchoolRepo {
 
     default Optional<School> findSchoolById(Long id) {
-        final SchoolMapper schoolMapper = new SchoolMapper();
-        return this.findById(id).map(schoolMapper::map);
+        return this.findById(id).map(SchoolMapper::map);
     };
 }
