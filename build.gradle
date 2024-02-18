@@ -50,25 +50,25 @@ task generatePostsAndComments() {
 
 		// SCHOOLS
 		for (int i = 1; i <= 3; i++) {
-			dataSql.append("insert into SCHOOL_ENTITY(id, name, hour_price) " +
+			dataSql.append("insert into SCHOOL(id, name, hour_price) " +
 					"values (${i}, 'Public School Number: ${i}', " + i*10 + ");\n")
 		}
 
 		// PARENTS
 		for (int i = 1; i <= 10; i++) {
-			dataSql.append("insert into PARENT_ENTITY(id, first_name, last_name) " +
+			dataSql.append("insert into PARENT(id, first_name, last_name) " +
 					"values (${i}, '${names[i-1]}', '${surnames[i-1]}');\n")
 		}
 
 		// CHILDREN
 		for (int i = 1; i <= 10; i++) {
-			dataSql.append("insert into CHILD_ENTITY(id, first_name, last_name, parent_id, school_id) " +
+			dataSql.append("insert into CHILD(id, first_name, last_name, parent_id, school_id) " +
 					"values (${i}, '${names[getRandomNumber(10)]}_junior', '${surnames[i%7]}', ${i%7+1}, ${i%3+1});\n")
 		}
 
 		// ATTENDANCE
 		for (int i = 1; i <= 15; i++) {
-			dataSql.append("insert into ATTENDANCE_ENTITY(id, entry_date, exit_date, child_id) " +
+			dataSql.append("insert into ATTENDANCE(id, entry_date, exit_date, child_id) " +
 					"values (${i}, '" + LocalDateTime.now().withHour(i) + "', '" + LocalDateTime.now().withHour(i+3) + "', ${i%9+1});\n"
 			)
 		}

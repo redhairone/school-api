@@ -3,7 +3,7 @@ package com.ciesielski.schoolapi.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+@Entity(name = "child")
 @Data
 public class ChildEntity {
     @Id

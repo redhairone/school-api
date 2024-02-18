@@ -1,21 +1,36 @@
 package com.ciesielski.schoolapi.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 
 @Data
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChildBill {
-    final private Child child;
-    private BigDecimal cost;
-    private long numberOfPaidHours;
+    private final Child child;
+    private final long numberOfPaidHours;
+    private final BigDecimal cost;
 
-    public ChildBill(final Child child, final Collection<Attendance> attendances) {
-        this.child = child;
-        this.numberOfPaidHours = attendances.stream()
+    public static ChildBill createChildBill(final Child child, final Collection<Attendance> attendances) {
+        long numberOfPaidHours = ChildBill.sumNumberOfPaidHours(attendances);
+        return new ChildBill(
+                child,
+                numberOfPaidHours,
+                ChildBill.calculateCostOfAllChildAttendances(child, numberOfPaidHours)
+        );
+    }
+
+    private static BigDecimal calculateCostOfAllChildAttendances(Child child, long numberOfPaidHours) {
+        return child.getSchool().getHour_price()
+                .multiply(BigDecimal.valueOf(numberOfPaidHours));
+    }
+
+    private static Long sumNumberOfPaidHours(Collection<Attendance> attendances) {
+        return attendances.stream()
                 .map(Attendance::calculateNumberOfPayedHours)
                 .reduce(0L, Long::sum);
-        this.cost = child.getSchool().getHour_price().multiply(BigDecimal.valueOf(numberOfPaidHours));
     }
 }

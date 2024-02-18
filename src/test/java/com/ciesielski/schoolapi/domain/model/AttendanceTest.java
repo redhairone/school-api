@@ -1,8 +1,6 @@
-package com.ciesielski.schoolapi.domain;
+package com.ciesielski.schoolapi.domain.model;
 
 import com.ciesielski.schoolapi.domain.exceptions.AttendanceDateError;
-import com.ciesielski.schoolapi.domain.model.Attendance;
-import com.ciesielski.schoolapi.domain.model.Child;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +25,6 @@ class AttendanceTest {
                 Arguments.of(LocalTime.of(15, 24), LocalTime.of(23, 32), 9L)
         );
     }
-
 
     @ParameterizedTest
     @MethodSource("provideCalculateNumberOfPayedHours")
