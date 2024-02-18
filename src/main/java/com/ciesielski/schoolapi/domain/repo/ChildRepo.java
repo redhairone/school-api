@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ChildRepo {
     List<Child> findAllChildrenByParentId(Long id);
+    List<Child> findAllChildrenBySchoolId(Long id);
 }

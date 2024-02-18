@@ -10,5 +10,5 @@ import java.math.BigDecimal;
 public class School {
     private Long id;
     private String name;
-    private BigDecimal hour_price; // todo: precision 2
+    private BigDecimal hourPrice; // todo: precision 2
 }

@@ -1,13 +1,14 @@
 package com.ciesielski.schoolapi.domain.service;
 
-import com.ciesielski.schoolapi.domain.exceptions.ParentNotFoundException;
+import com.ciesielski.schoolapi.domain.exceptions.NoSuchParentException;
 import com.ciesielski.schoolapi.domain.model.*;
+import com.ciesielski.schoolapi.domain.model.bill.ChildBill;
+import com.ciesielski.schoolapi.domain.model.bill.ParentBill;
 import com.ciesielski.schoolapi.domain.repo.AttendanceRepo;
 import com.ciesielski.schoolapi.domain.repo.ChildRepo;
 import com.ciesielski.schoolapi.domain.repo.ParentRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.ParameterLabelException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class ParentService {
     public ParentBill getParentBillForMonth(Long id, int month) {
         // Find PARENT
         Parent parent = parentRepo.findParentById(id)
-                .orElseThrow(() -> new ParentNotFoundException(id));
+                .orElseThrow(() -> new NoSuchParentException(id));
 
         // Find CHILDREN by parent id
         List<Child> children = childRepo.findAllChildrenByParentId(id);

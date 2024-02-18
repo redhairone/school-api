@@ -1,6 +1,7 @@
 package com.ciesielski.schoolapi.domain.model;
 
 import com.ciesielski.schoolapi.domain.exceptions.AttendanceDateError;
+import com.ciesielski.schoolapi.domain.util.LocalDateTimeUtils;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,9 +15,6 @@ public class Attendance {
     private LocalDateTime exitDate;
     private Child child;
 
-    private static final LocalTime SEVEN_AM = LocalTime.of(7, 0);
-    private static final LocalTime TWELVE_PM = LocalTime.of(12, 0);
-
     public Attendance(Long id, LocalDateTime entryDate, LocalDateTime exitDate, Child child) {
         this.id = id;
         this.entryDate = entryDate;
@@ -24,11 +22,11 @@ public class Attendance {
         this.child = child;
 
         if (isEntryAfterExit()) {
-            throw new AttendanceDateError("Exit date cannot be set to after the entry date");
+            throw AttendanceDateError.entryAfterExitError(entryDate, exitDate);
         }
 
         if (isEntryAndExitNotTheSameDay()) {
-            throw new AttendanceDateError("Entry and exit dates must happen on the same day");
+            throw AttendanceDateError.entryAndExitNotOnTheSameDayError(entryDate, exitDate);
         }
     }
 
@@ -37,16 +35,16 @@ public class Attendance {
         LocalTime endTime = exitDate.toLocalTime();
         long numberOfPaidHours = 0;
 
-        if (isItBeforeSevenAm(startTime)) {
+        if (isBeforeSevenAm(startTime)) {
             numberOfPaidHours += countHours(
                     startTime,
-                    isBeforeOrAtSevenAm(endTime) ? endTime : SEVEN_AM
+                    isBeforeOrAtSevenAm(endTime) ? endTime : LocalDateTimeUtils.SEVEN_AM
             );
         }
 
-        if (isItAfterTwelvePm(endTime)) {
+        if (isAfterTwelvePm(endTime)) {
             numberOfPaidHours += countHours(
-                    isItAfterTwelvePm(startTime) ? startTime : TWELVE_PM,
+                    isAfterTwelvePm(startTime) ? startTime : LocalDateTimeUtils.TWELVE_PM,
                     endTime
             );
         }
@@ -73,14 +71,14 @@ public class Attendance {
     }
 
     private boolean isBeforeOrAtSevenAm(LocalTime time) {
-        return time.isBefore(Attendance.SEVEN_AM) || time.equals(Attendance.SEVEN_AM);
+        return time.isBefore(LocalDateTimeUtils.SEVEN_AM) || time.equals(LocalDateTimeUtils.SEVEN_AM);
     }
 
-    private static boolean isItAfterTwelvePm(LocalTime endTime) {
-        return endTime.isAfter(TWELVE_PM);
+    private static boolean isAfterTwelvePm(LocalTime endTime) {
+        return endTime.isAfter(LocalDateTimeUtils.TWELVE_PM);
     }
 
-    private static boolean isItBeforeSevenAm(LocalTime startTime) {
-        return startTime.isBefore(SEVEN_AM);
+    private static boolean isBeforeSevenAm(LocalTime startTime) {
+        return startTime.isBefore(LocalDateTimeUtils.SEVEN_AM);
     }
 }

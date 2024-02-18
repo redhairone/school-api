@@ -1,5 +1,6 @@
 package com.ciesielski.schoolapi.domain.model;
 
+import com.ciesielski.schoolapi.domain.model.bill.ChildBill;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,7 +34,7 @@ class ChildBillTest {
         // GIVEN:
         Parent parent = Mockito.mock(Parent.class);
         School school = Mockito.mock(School.class);
-        Mockito.when(school.getHour_price()).thenReturn(costPerHour);
+        Mockito.when(school.getHourPrice()).thenReturn(costPerHour);
 
         Child child = new Child(0L, "", "", parent, school);
 
@@ -49,7 +50,7 @@ class ChildBillTest {
         // THEN:
         Assertions.assertEquals(child, childBill.getChild());
         Assertions.assertEquals(expectedHoursSum, childBill.getNumberOfPaidHours());
-        Assertions.assertEquals(expectedFullCost, childBill.getCost());
+        Assertions.assertEquals(expectedFullCost, childBill.getChildCost());
     }
 
     private Attendance mockAttendance(final long numberOfPaidHours) {

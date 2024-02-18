@@ -8,7 +8,7 @@ public class SchoolMapper {
         return School.builder()
                 .id(input.getId())
                 .name(input.getName())
-                .hour_price(input.getHourPrice())
+                .hourPrice(input.getHourPrice())
                 .build();
     }
 }

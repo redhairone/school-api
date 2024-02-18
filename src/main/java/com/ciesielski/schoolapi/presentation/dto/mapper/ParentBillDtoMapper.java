@@ -1,6 +1,6 @@
 package com.ciesielski.schoolapi.presentation.dto.mapper;
 
-import com.ciesielski.schoolapi.domain.model.ParentBill;
+import com.ciesielski.schoolapi.domain.model.bill.ParentBill;
 import com.ciesielski.schoolapi.presentation.dto.ChildBillDto;
 import com.ciesielski.schoolapi.presentation.dto.ParentBillDto;
 
@@ -15,7 +15,7 @@ public class ParentBillDtoMapper {
         return ParentBillDto.builder()
                 .parent(input.getParent())
                 .childrenBills(childrenBillsDto)
-                .fullCost(input.getFullCost())
+                .fullCost(input.getParentCost())
                 .build();
     }
 }
