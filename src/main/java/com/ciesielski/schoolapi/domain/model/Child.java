@@ -2,13 +2,15 @@ package com.ciesielski.schoolapi.domain.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder
+@RequiredArgsConstructor
 public class Child {
-    private Long id;
-    private String firstname;
-    private String lastname;
-    private Parent parent;
-    private School school;
+    private final Long id;
+    private final String firstname;
+    private final String lastname;
+    private final Parent parent;
+    private final School school;
 }

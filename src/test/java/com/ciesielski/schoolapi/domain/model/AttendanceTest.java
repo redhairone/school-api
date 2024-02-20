@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 class AttendanceTest {
 
-    public static Stream<Arguments> provideCalculateNumberOfPayedHours() {
+    public static Stream<Arguments> provideCalculateNumberOfPaidHours() {
         return Stream.of(
                 Arguments.of(LocalTime.of(6, 5), LocalTime.of(9, 50), 1L),
                 Arguments.of(LocalTime.of(7, 5), LocalTime.of(9, 50), 0L),
@@ -27,8 +27,8 @@ class AttendanceTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideCalculateNumberOfPayedHours")
-    void calculateNumberOfPayedHoursTest(final LocalTime startTime, final LocalTime endTime, final Long expected) {
+    @MethodSource("provideCalculateNumberOfPaidHours")
+    void calculateNumberOfPaidHoursTest(final LocalTime startTime, final LocalTime endTime, final Long expected) {
         //GIVEN:
         final Attendance attendance = new Attendance(
                 0L,

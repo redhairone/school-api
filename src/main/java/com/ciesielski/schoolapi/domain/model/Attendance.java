@@ -15,7 +15,7 @@ public class Attendance {
     private LocalDateTime exitDate;
     private Child child;
 
-    public Attendance(Long id, LocalDateTime entryDate, LocalDateTime exitDate, Child child) {
+    public Attendance(final Long id, final LocalDateTime entryDate, final LocalDateTime exitDate, final Child child) {
         this.id = id;
         this.entryDate = entryDate;
         this.exitDate = exitDate;

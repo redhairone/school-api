@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ParentJpaRepo extends JpaRepository<ParentEntity, Long>, ParentRepo {
-
     default Optional<Parent> findParentById(Long id) {
         return this.findById(id).map(ParentMapper::map);
     }

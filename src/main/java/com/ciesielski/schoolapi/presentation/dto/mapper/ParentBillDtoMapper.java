@@ -4,6 +4,7 @@ import com.ciesielski.schoolapi.domain.model.bill.ParentBill;
 import com.ciesielski.schoolapi.presentation.dto.ChildBillDto;
 import com.ciesielski.schoolapi.presentation.dto.ParentBillDto;
 
+import java.math.RoundingMode;
 import java.util.List;
 
 public class ParentBillDtoMapper {
@@ -15,7 +16,7 @@ public class ParentBillDtoMapper {
         return ParentBillDto.builder()
                 .parent(input.getParent())
                 .childrenBills(childrenBillsDto)
-                .fullCost(input.getParentCost())
+                .fullCost(input.getParentCost().setScale(2, RoundingMode.CEILING))
                 .build();
     }
 }

@@ -1,12 +1,13 @@
 package com.ciesielski.schoolapi.domain.model.bill;
 
-import com.ciesielski.schoolapi.domain.model.Attendance;
+import com.ciesielski.schoolapi.domain.exceptions.bill.SchoolBillException;
 import com.ciesielski.schoolapi.domain.model.School;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -16,17 +17,20 @@ public class SchoolBill {
     private final List<ParentBill> parentBills;
     private final BigDecimal schoolProfit;
 
-    public static SchoolBill createSchoolBills(final School school, final List<Attendance> attendances) {
-        final List<ChildBill> childrenBills = ChildBill.createChildBills(attendances);
-        final List<ParentBill> parentBills = ParentBill.createParentBills(childrenBills);
-        return SchoolBill.createSchoolBill(school, parentBills);
-    }
-
-    public static SchoolBill createSchoolBill(final School school, final List<ParentBill> parentBills) {
+    public static SchoolBill createSchoolBill(final List<ParentBill> parentBills) throws SchoolBillException {
+        checkIfParentBillsEmpty(parentBills);
         return new SchoolBill(
-                school,
+                getSchoolFromParentBills(parentBills),
                 parentBills,
                 calculateFullCost(parentBills)
+        );
+    }
+
+    public static SchoolBill createEmptySchoolBill(final School school) {
+        return new SchoolBill(
+                school,
+                Collections.emptyList(),
+                BigDecimal.ZERO
         );
     }
 
@@ -35,4 +39,15 @@ public class SchoolBill {
                 .map(ParentBill::getParentCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    private static void checkIfParentBillsEmpty(List<ParentBill> parentBills) throws SchoolBillException {
+        if (parentBills.isEmpty()) {
+            throw new SchoolBillException();
+        }
+    }
+
+    private static School getSchoolFromParentBills(List<ParentBill> parentBills) {
+        return parentBills.get(0).getChildrenBills().get(0).getChild().getSchool();
+    }
+
 }

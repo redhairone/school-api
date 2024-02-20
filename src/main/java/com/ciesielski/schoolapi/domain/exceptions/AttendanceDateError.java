@@ -9,13 +9,13 @@ public class AttendanceDateError extends RuntimeException {
 
     public static AttendanceDateError entryAfterExitError(final LocalDateTime entryDate, final LocalDateTime exitDate) {
         return new AttendanceDateError(
-                String.format("Exit date (%t) cannot be set to after the entry date (%t)", exitDate, entryDate)
+                "Exit date (" + exitDate + ") cannot be set to after the entry date (" + entryDate + ")"
         );
     }
 
     public static AttendanceDateError entryAndExitNotOnTheSameDayError(final LocalDateTime entryDate, final LocalDateTime exitDate) {
         return new AttendanceDateError(
-                String.format("Entry (%t) and exit (%t) dates must happen on the same day", entryDate, exitDate)
+                "Entry (" + entryDate + ") and exit (" + exitDate + ") dates must happen on the same day"
         );
     }
 }

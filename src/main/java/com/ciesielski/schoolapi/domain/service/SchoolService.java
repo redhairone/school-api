@@ -1,12 +1,15 @@
 package com.ciesielski.schoolapi.domain.service;
 
+import com.ciesielski.schoolapi.domain.exceptions.bill.ChildBillException;
 import com.ciesielski.schoolapi.domain.exceptions.NoSuchSchoolException;
+import com.ciesielski.schoolapi.domain.exceptions.bill.ParentBillException;
+import com.ciesielski.schoolapi.domain.exceptions.bill.SchoolBillException;
 import com.ciesielski.schoolapi.domain.model.Attendance;
-import com.ciesielski.schoolapi.domain.model.Child;
 import com.ciesielski.schoolapi.domain.model.School;
+import com.ciesielski.schoolapi.domain.model.bill.ChildBill;
+import com.ciesielski.schoolapi.domain.model.bill.ParentBill;
 import com.ciesielski.schoolapi.domain.model.bill.SchoolBill;
 import com.ciesielski.schoolapi.domain.repo.AttendanceRepo;
-import com.ciesielski.schoolapi.domain.repo.ChildRepo;
 import com.ciesielski.schoolapi.domain.repo.SchoolRepo;
 import com.ciesielski.schoolapi.domain.util.LocalDateTimeUtils;
 import jakarta.transaction.Transactional;
@@ -19,27 +22,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SchoolService {
 
-    private final SchoolRepo schoolRepo;
-    private final ChildRepo childRepo;
     private final AttendanceRepo attendanceRepo;
+    private final SchoolRepo schoolRepo;
 
-    @Transactional
-    public SchoolBill getSchoolBillForMonth(final Long id, final int month) {
-        // Find SCHOOL
-        final School school = schoolRepo.findSchoolById(id)
-                .orElseThrow(() -> new NoSuchSchoolException(id));
-
-        // Find CHILDREN by school id
-        final List<Child> children = childRepo.findAllChildrenBySchoolId(id);
-
-        // Find ATTENDANCES by children ids and in month
-        final List<Long> childrenIds = children.stream().map(Child::getId).toList();
-        final List<Attendance> attendances = attendanceRepo.findAllAttendanceByChildIdInAndDateBetween(
-                childrenIds,
+    public SchoolBill getSchoolBillForMonth(final Long schoolId, final int month) {
+        List<Attendance> attendances = attendanceRepo.findAllChildAttendancesForSchoolInMonth(
+                schoolId,
                 LocalDateTimeUtils.createStartOfChosenMonth(month),
                 LocalDateTimeUtils.createStartOfChosenMonth(month + 1)
         );
 
-        return SchoolBill.createSchoolBills(school, attendances);
+        try {
+            final List<ChildBill> childrenBills = ChildBill.createChildBills(attendances);
+            final List<ParentBill> parentBills = ParentBill.createParentBills(childrenBills);
+            return SchoolBill.createSchoolBill(parentBills);
+        } catch (final ChildBillException | ParentBillException | SchoolBillException e) {
+            return getEmptySchoolBill(schoolId);
+        }
+    }
+
+    private SchoolBill getEmptySchoolBill(final Long schoolId) {
+        final School school = schoolRepo.findSchoolById(schoolId).orElseThrow(() -> new NoSuchSchoolException(schoolId));
+        return SchoolBill.createEmptySchoolBill(school);
     }
 }

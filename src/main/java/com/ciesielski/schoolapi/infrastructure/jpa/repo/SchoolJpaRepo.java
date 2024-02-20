@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface SchoolJpaRepo extends JpaRepository<SchoolEntity, Long>, SchoolRepo {
-
     default Optional<School> findSchoolById(Long id) {
         return this.findById(id).map(SchoolMapper::map);
     };

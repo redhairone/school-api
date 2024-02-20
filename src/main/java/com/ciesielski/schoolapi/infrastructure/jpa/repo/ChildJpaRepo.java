@@ -1,30 +1,10 @@
 package com.ciesielski.schoolapi.infrastructure.jpa.repo;
 
-import com.ciesielski.schoolapi.domain.model.Child;
 import com.ciesielski.schoolapi.domain.repo.ChildRepo;
 import com.ciesielski.schoolapi.infrastructure.entities.ChildEntity;
-import com.ciesielski.schoolapi.infrastructure.entities.mapper.ChildMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ChildJpaRepo extends JpaRepository<ChildEntity, Long>, ChildRepo {
-
-    default List<Child> findAllChildrenByParentId(Long id) {
-        return this.findAllByParentId(id).stream()
-                .map(ChildMapper::map)
-                .toList();
-    }
-
-    default List<Child> findAllChildrenBySchoolId(Long id) {
-        return this.findAllBySchoolId(id).stream()
-                .map(ChildMapper::map)
-                .toList();
-    }
-
-    List<ChildEntity> findAllByParentId(Long id);
-
-    List<ChildEntity> findAllBySchoolId(Long id);
 }

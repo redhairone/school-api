@@ -11,6 +11,6 @@ import java.util.List;
 @Builder
 public class SchoolBillDto {
     private final School school;
-    private final BigDecimal fullCost;
+    private final BigDecimal fullProfit;
     private final List<ParentBillDto> parentBills;
 }
